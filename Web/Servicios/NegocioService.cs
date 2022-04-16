@@ -15,12 +15,12 @@ namespace Web.Servicios
         
         public bool TengoPermisos(long id_negocio, long id_usuario)
         {
-            return _context.NegocioUsuario.Where(x => x.ID_NEGOCIO == id_negocio && x.ID_USUARIO == id_usuario).Count() > 0;
+            return _context.NegocioUsuario.Where(x => x.IdNegocio == id_negocio && x.IdUsuario == id_usuario).Count() > 0;
         }
 
         public bool SlugValido(long id_negocio, string slug)
         {
-            return _context.Negocio.Where(x => x.ID_NEGOCIO != id_negocio && x.SLUG == slug).Count() == 0;
+            return _context.Negocio.Where(x => x.IdNegocio != id_negocio && x.Slug == slug).Count() == 0;
         }
     }
 }

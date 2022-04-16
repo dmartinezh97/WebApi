@@ -18,17 +18,17 @@ namespace Web.Models.Servicio
         public int cantidad_max_pp { get; set; }
         public ServicioModel() { }
         public ServicioModel(SERVICIOS servicio) {
-            idservicio = servicio.ID_SERVICIO;
-            nombre = servicio.NOMBRE;
-            descripcion = servicio.DESCRIPCION;
-            precio = servicio.PRECIO;
-            precio_en_puerta = servicio.PRECIO_EN_PUERTA;
-            visibilidad = servicio.VISIBILIDAD;
-            cantidad = servicio.CANTIDAD;
-            fecha_inicio_venta = servicio.FECHA_INICIO_VENTA.ToString("yyyy-MM-ddTHH:mm");
-            fecha_fin_venta = servicio.FECHA_FIN_VENTA.ToString("yyyy-MM-ddTHH:mm");
-            idestadoservicio = servicio.ID_ESTADO_SERVICIO;
-            cantidad_max_pp = servicio.CANTIDAD_MAX_PP;
+            idservicio = servicio.IdServicio;
+            nombre = servicio.Nombre;
+            descripcion = servicio.Descripcion;
+            precio = servicio.Precio;
+            precio_en_puerta = servicio.PrecioEnPuerta;
+            visibilidad = servicio.Visibilidad;
+            cantidad = servicio.Cantidad;
+            fecha_inicio_venta = servicio.FechaInicioVenta.ToString("yyyy-MM-ddTHH:mm");
+            fecha_fin_venta = servicio.FechaFinVenta.ToString("yyyy-MM-ddTHH:mm");
+            //idestadoservicio = servicio.EstadoServicio;
+            cantidad_max_pp = servicio.CantidadMaximaPorPersona;
         }
     }
 }

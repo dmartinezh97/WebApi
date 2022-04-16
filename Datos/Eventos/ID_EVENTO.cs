@@ -11,8 +11,8 @@ namespace Datos.Eventos
     {
         public void Configure(EntityTypeBuilder<EVENTOS> builder)
         {
-            builder.ToTable("EVENTOS")
-                .HasKey(x => x.ID_EVENTO);
+            builder.ToTable("Eventos")
+                .HasKey(x => x.IdEvento);
         }
     }
 }

@@ -8,18 +8,18 @@ namespace Entidades.Servicios
 {
     public class SERVICIOS
     {
-        public long ID_SERVICIO { get; set; }
-        public long ID_EVENTO { get; set; }
-        public string NOMBRE { get; set; }
-        public string DESCRIPCION { get; set; }
-        public double PRECIO { get; set; }
-        public double PRECIO_EN_PUERTA { get; set; }
-        public bool VISIBILIDAD { get; set; }
-        public int CANTIDAD { get; set; }
-        public DateTime FECHA_INICIO_VENTA { get; set; }
-        public DateTime FECHA_FIN_VENTA { get; set; }
-        public int CANTIDAD_MAX_PP { get; set; }
-        public long ID_ESTADO_SERVICIO { get; set; }
+        public long IdServicio { get; set; }
+        public long IdEvento { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public double Precio { get; set; }
+        public double PrecioEnPuerta { get; set; }
+        public bool Visibilidad { get; set; }
+        public int Cantidad { get; set; }
+        public DateTime FechaInicioVenta { get; set; }
+        public DateTime FechaFinVenta { get; set; }
+        public int CantidadMaximaPorPersona { get; set; }
+        public string EstadoServicio { get; set; }
         
         
         [ForeignKey("ID_EVENTO")]

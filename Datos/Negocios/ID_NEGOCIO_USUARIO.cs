@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Datos.Usuarios {
-    public class ID_NEGOCIO_USUARIO : IEntityTypeConfiguration<NEGOCIO_USUARIO> {
-        public void Configure(EntityTypeBuilder<NEGOCIO_USUARIO> builder) {
-            builder.ToTable("NEGOCIO_USUARIO")
-                .HasKey(x => x.ID_NEGOCIO_USUARIO);
+    public class ID_NEGOCIO_USUARIO : IEntityTypeConfiguration<NEGOCIOUSUARIO> {
+        public void Configure(EntityTypeBuilder<NEGOCIOUSUARIO> builder) {
+            builder.ToTable("NegocioUsuario")
+                .HasKey(x => x.IdNegocioUsuario);
         }
     }
 }

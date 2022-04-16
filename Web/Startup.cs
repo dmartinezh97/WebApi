@@ -37,8 +37,10 @@ namespace Web {
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("Conexion"), b => b.MigrationsAssembly("Web")));
+            services.AddTransient<IUsuarioService, UsuarioService>();
             services.AddTransient<INegocioService, NegocioService>();
             services.AddTransient<IServicioService, ServicioService>();
+            services.AddTransient<IEmailService, EmailService>();
             services.AddSingleton<IArchivoService, ArchivosService>();
             services.AddHttpContextAccessor();
 

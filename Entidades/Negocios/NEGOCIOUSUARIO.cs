@@ -7,15 +7,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Entidades.Negocios {
-    public class NEGOCIO_USUARIO {
+    public class NEGOCIOUSUARIO {
         [Key]
-        public long ID_NEGOCIO_USUARIO { get; set; }
-        public long ID_USUARIO { get; set; }
-        public long ID_NEGOCIO { get; set; }
+        public long IdNegocioUsuario { get; set; }
+        public long IdUsuario { get; set; }
+        public long IdNegocio { get; set; }
 
-        [ForeignKey("ID_USUARIO")]
+        [ForeignKey("IdUsuario")]
         public USUARIOS USUARIOS { get; set; }
-        [ForeignKey("ID_NEGOCIO")]
+        [ForeignKey("IdNegocio")]
         public NEGOCIOS NEGOCIOS { get; set; }
     }
 }

@@ -11,8 +11,8 @@ namespace Datos.Servicios
     {
         public void Configure(EntityTypeBuilder<SERVICIOS> builder)
         {
-            builder.ToTable("SERVICIOS")
-                .HasKey(x => x.ID_SERVICIO);
+            builder.ToTable("Servicios")
+                .HasKey(x => x.IdServicio);
         }
     }
 }

@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Datos.Negocios {
-    public class ID_NEGOCIO : IEntityTypeConfiguration<NEGOCIOS> {
-        public void Configure(EntityTypeBuilder<NEGOCIOS> builder) {
-            builder.ToTable("NEGOCIOS")
-                .HasKey(x => x.ID_NEGOCIO);
-            builder.HasIndex(x => x.SLUG).IsUnique();
+    public class ID_NEGOCIO : IEntityTypeConfiguration<Entidades.Negocios.NEGOCIOS> {
+        public void Configure(EntityTypeBuilder<Entidades.Negocios.NEGOCIOS> builder) {
+            builder.ToTable("Negocios")
+                .HasKey(x => x.IdNegocio);
+            builder.HasIndex(x => x.Slug).IsUnique();
         }
     }
 }

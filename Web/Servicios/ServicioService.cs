@@ -19,19 +19,19 @@ namespace Web.Servicios
         
         public IQueryable<ServicioModel> GetServiciosNegocio(long id_evento)
         {
-            return _context.Servicios.Where(x => x.ID_EVENTO == id_evento).Select(x => new ServicioModel(x));
+            return _context.Servicios.Where(x => x.IdEvento == id_evento).Select(x => new ServicioModel(x));
         }
 
         public void NuevoServicio(long id_evento)
         {
             var newServicio = new SERVICIOS();
-            newServicio.ID_EVENTO = id_evento;
-            newServicio.NOMBRE = "Nuevo servicio";
-            newServicio.DESCRIPCION = "Descripción del servicio";
-            newServicio.VISIBILIDAD = false;
-            newServicio.FECHA_INICIO_VENTA = DateTime.Now.Date;
-            newServicio.FECHA_FIN_VENTA = DateTime.Now.Date.AddDays(1);
-            newServicio.ID_ESTADO_SERVICIO = (long)EstadoServicioEnum.EnVenta;
+            newServicio.IdEvento = id_evento;
+            newServicio.Nombre = "Nuevo servicio";
+            newServicio.Descripcion = "Descripción del servicio";
+            newServicio.Visibilidad = false;
+            newServicio.FechaInicioVenta = DateTime.Now.Date;
+            newServicio.FechaFinVenta = DateTime.Now.Date.AddDays(1);
+            //newServicio.EstadoServicio = (long)EstadoServicioEnum.EnVenta;
             _context.Servicios.Add(newServicio);
         }
 
@@ -41,23 +41,23 @@ namespace Web.Servicios
             var servicio = _context.Servicios.Find(servicioDTO.idservicio);
             if (servicio == null) throw new ArgumentException("No se encontró el servicio");
             
-            servicio.ID_ESTADO_SERVICIO = servicioDTO.idestadoservicio;
-            servicio.NOMBRE = servicioDTO.nombre;
-            servicio.DESCRIPCION = servicioDTO.descripcion;
-            servicio.CANTIDAD = servicioDTO.cantidad;
-            servicio.VISIBILIDAD = servicioDTO.visibilidad;
-            servicio.PRECIO = servicioDTO.precio;
-            servicio.PRECIO_EN_PUERTA = servicioDTO.precio_en_puerta;
+            //servicio.EstadoServicio = servicioDTO.idestadoservicio;
+            servicio.Nombre = servicioDTO.nombre;
+            servicio.Descripcion = servicioDTO.descripcion;
+            servicio.Cantidad = servicioDTO.cantidad;
+            servicio.Visibilidad = servicioDTO.visibilidad;
+            servicio.Precio = servicioDTO.precio;
+            servicio.PrecioEnPuerta = servicioDTO.precio_en_puerta;
             
             var fechaInicioVenta = DateTime.Parse(servicioDTO.fecha_inicio_venta);
-            servicio.FECHA_INICIO_VENTA = fechaInicioVenta;
+            servicio.FechaInicioVenta = fechaInicioVenta;
             
             var fechaFinVenta = DateTime.Parse(servicioDTO.fecha_fin_venta);
             if (fechaFinVenta <= fechaInicioVenta) throw new ArgumentException("La fecha de fin de venta no puede ser anterior a la fecha de inicio de venta");
-            servicio.FECHA_FIN_VENTA = fechaFinVenta;
+            servicio.FechaFinVenta = fechaFinVenta;
 
 
-            servicio.CANTIDAD_MAX_PP = servicioDTO.cantidad_max_pp;
+            servicio.CantidadMaximaPorPersona = servicioDTO.cantidad_max_pp;
         }
     }
 }

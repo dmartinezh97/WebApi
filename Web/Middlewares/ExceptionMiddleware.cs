@@ -39,6 +39,12 @@ namespace Web.Middlewares
                     case ArgumentException e:
                         response.StatusCode = StatusCodes.Status400BadRequest;
                         break;
+                    case EmailFormatException e:
+                        response.StatusCode = StatusCodes.Status400BadRequest;
+                        break;
+                    case FormatException e:
+                        response.StatusCode = StatusCodes.Status400BadRequest;
+                        break;
                     default:
                         //TODO: Guardar todos los errores que no estén controlados en una tabla, convertiendo el ex.gettype para controlarlos en un futuro
                         response.StatusCode = StatusCodes.Status500InternalServerError;

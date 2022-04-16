@@ -8,8 +8,8 @@ using System.Text;
 namespace Datos.Usuarios {
     public class ID_USUARIO : IEntityTypeConfiguration<USUARIOS> {
         public void Configure(EntityTypeBuilder<USUARIOS> builder) {
-            builder.ToTable("USUARIOS")
-                .HasKey(x => x.ID_USUARIO);
+            builder.ToTable("Usuarios")
+                .HasKey(x => x.IdUsuario);
         }
     }
 }

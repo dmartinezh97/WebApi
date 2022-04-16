@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220408191559_Slug")]
-    partial class Slug
+    [Migration("20220412161340_InitCreation1")]
+    partial class InitCreation1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,235 +23,212 @@ namespace Web.Migrations
 
             modelBuilder.Entity("Entidades.Eventos.EVENTOS", b =>
                 {
-                    b.Property<long>("ID_EVENTO")
+                    b.Property<long>("IdEvento")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("DESCRIPCION")
+                    b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ESTADO")
+                    b.Property<string>("Estado")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FECHA_CREACION")
+                    b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FECHA_FIN")
+                    b.Property<DateTime>("FechaFin")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FECHA_INICIO")
+                    b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FECHA_MODIFICACION")
+                    b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("ID_NEGOCIO")
+                    b.Property<long>("IdNegocio")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("MAXIMO_VENTAS")
+                    b.Property<string>("ImgCabecera")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaximoVentas")
                         .HasColumnType("int");
 
-                    b.Property<string>("NOMBRE")
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("URL_IMG_CABECERA")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("IdEvento");
 
-                    b.HasKey("ID_EVENTO");
+                    b.HasIndex("IdNegocio");
 
-                    b.HasIndex("ID_NEGOCIO");
-
-                    b.ToTable("EVENTOS");
+                    b.ToTable("Eventos");
                 });
 
             modelBuilder.Entity("Entidades.Negocios.NEGOCIOS", b =>
                 {
-                    b.Property<long>("ID_NEGOCIO")
+                    b.Property<long>("IdNegocio")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("DESCRIPCION")
+                    b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ID_TIPO_NEGOCIO")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("NOMBRE")
+                    b.Property<string>("ImgCabecera")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SLUG")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("SLUG")
-                        .HasAnnotation("Unique", true);
-
-                    b.Property<string>("UBICACION")
+                    b.Property<string>("Logo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("URL_IMG_CABECERA")
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("URL_LOGO")
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Ubicacion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID_NEGOCIO");
+                    b.HasKey("IdNegocio");
 
-                    b.HasIndex("ID_TIPO_NEGOCIO");
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasFilter("[Slug] IS NOT NULL");
 
-                    b.ToTable("NEGOCIOS");
+                    b.ToTable("Negocios");
                 });
 
-            modelBuilder.Entity("Entidades.Negocios.NEGOCIO_USUARIO", b =>
+            modelBuilder.Entity("Entidades.Negocios.NEGOCIOUSUARIO", b =>
                 {
-                    b.Property<long>("ID_NEGOCIO_USUARIO")
+                    b.Property<long>("IdNegocioUsuario")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("ID_NEGOCIO")
+                    b.Property<long>("IdNegocio")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ID_USUARIO")
+                    b.Property<long>("IdUsuario")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ID_NEGOCIO_USUARIO");
+                    b.HasKey("IdNegocioUsuario");
 
-                    b.HasIndex("ID_NEGOCIO");
+                    b.HasIndex("IdNegocio");
 
-                    b.HasIndex("ID_USUARIO");
+                    b.HasIndex("IdUsuario");
 
-                    b.ToTable("NEGOCIO_USUARIO");
+                    b.ToTable("NegocioUsuario");
                 });
 
             modelBuilder.Entity("Entidades.Servicios.SERVICIOS", b =>
                 {
-                    b.Property<long>("ID_SERVICIO")
+                    b.Property<long>("IdServicio")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CANTIDAD")
+                    b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<int>("CANTIDAD_MAX_PP")
+                    b.Property<int>("CantidadMaximaPorPersona")
                         .HasColumnType("int");
 
-                    b.Property<string>("DESCRIPCION")
+                    b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FECHA_FIN_VENTA")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FECHA_INICIO_VENTA")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("ID_ESTADO_SERVICIO")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ID_EVENTO")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("NOMBRE")
+                    b.Property<string>("EstadoServicio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("PRECIO")
+                    b.Property<DateTime>("FechaFinVenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicioVenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ID_EVENTO")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IdEvento")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Precio")
                         .HasColumnType("float");
 
-                    b.Property<double>("PRECIO_EN_PUERTA")
+                    b.Property<double>("PrecioEnPuerta")
                         .HasColumnType("float");
 
-                    b.Property<bool>("VISIBILIDAD")
+                    b.Property<bool>("Visibilidad")
                         .HasColumnType("bit");
 
-                    b.HasKey("ID_SERVICIO");
+                    b.HasKey("IdServicio");
 
                     b.HasIndex("ID_EVENTO");
 
-                    b.ToTable("SERVICIOS");
-                });
-
-            modelBuilder.Entity("Entidades.TipoNegocio.TIPO_NEGOCIO", b =>
-                {
-                    b.Property<long>("ID_TIPO_NEGOCIO")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("NOMBRE")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID_TIPO_NEGOCIO");
-
-                    b.ToTable("TIPO_NEGOCIO");
+                    b.ToTable("Servicios");
                 });
 
             modelBuilder.Entity("Entidades.Usuarios.USUARIOS", b =>
                 {
-                    b.Property<long>("ID_USUARIO")
+                    b.Property<long>("IdUsuario")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("APELLIDOS")
+                    b.Property<string>("Apellidos")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EMAIL")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FECHA_NACIMIENTO")
+                    b.Property<DateTime?>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("NOMBRE")
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PASSWORD")
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TELEFONO")
+                    b.Property<string>("Rol")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("USUARIO")
+                    b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID_USUARIO");
+                    b.Property<string>("Usuario")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("USUARIOS");
+                    b.HasKey("IdUsuario");
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Entidades.Eventos.EVENTOS", b =>
                 {
                     b.HasOne("Entidades.Negocios.NEGOCIOS", "NEGOCIO")
                         .WithMany()
-                        .HasForeignKey("ID_NEGOCIO")
+                        .HasForeignKey("IdNegocio")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("NEGOCIO");
                 });
 
-            modelBuilder.Entity("Entidades.Negocios.NEGOCIOS", b =>
-                {
-                    b.HasOne("Entidades.TipoNegocio.TIPO_NEGOCIO", "TIPO_NEGOCIO")
-                        .WithMany()
-                        .HasForeignKey("ID_TIPO_NEGOCIO")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TIPO_NEGOCIO");
-                });
-
-            modelBuilder.Entity("Entidades.Negocios.NEGOCIO_USUARIO", b =>
+            modelBuilder.Entity("Entidades.Negocios.NEGOCIOUSUARIO", b =>
                 {
                     b.HasOne("Entidades.Negocios.NEGOCIOS", "NEGOCIOS")
                         .WithMany()
-                        .HasForeignKey("ID_NEGOCIO")
+                        .HasForeignKey("IdNegocio")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entidades.Usuarios.USUARIOS", "USUARIOS")
                         .WithMany()
-                        .HasForeignKey("ID_USUARIO")
+                        .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -264,9 +241,7 @@ namespace Web.Migrations
                 {
                     b.HasOne("Entidades.Eventos.EVENTOS", "EVENTOS")
                         .WithMany()
-                        .HasForeignKey("ID_EVENTO")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ID_EVENTO");
 
                     b.Navigation("EVENTOS");
                 });

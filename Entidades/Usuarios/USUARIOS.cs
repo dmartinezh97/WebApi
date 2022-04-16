@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Entidades.Usuarios {
-    public class USUARIOS {
+    public partial class USUARIOS
+    {
         [Key]
-        public long ID_USUARIO { get; set; }
-        public string NOMBRE { get; set; }
-        public string APELLIDOS { get; set; }
-        public string USUARIO { get; set; }
-        public string PASSWORD { get; set; }
-        public string TELEFONO { get; set; }
-        public string EMAIL { get; set; }
-        public DateTime? FECHA_NACIMIENTO { get; set; }
-        public long ROL_USUARIO { get; set; }
+        public long IdUsuario { get; set; }
+        public string Nombre { get; set; }
+        public string Apellidos { get; set; }
+        public string Usuario { get; set; }
+        public string Password { get; set; }
+        public string Telefono { get; set; }
+        public string Email { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
+        public string Rol { get; set; }
+        
+        [NotMapped]
+        public string Token { get; set; }
     }
 }

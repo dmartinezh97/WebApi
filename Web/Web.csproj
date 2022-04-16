@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\EventoController.cs" />
+    <Compile Remove="Controllers\NegocioController.cs" />
+    <Compile Remove="Controllers\UsuarioController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.23" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.23" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.23" />
@@ -22,10 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Administrador\" />
-    <Folder Include="Controllers\Cliente\" />
-    <Folder Include="Controllers\Empleado\" />
+    <Folder Include="Controllers\User\" />
     <Folder Include="Controllers\Profesional\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Models\Usuario\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
