@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Web.Models.Negocio {
     public class NegocioResultModel {
-        public long idnegocio { get; set; }
+        public long IdNegocio { get; set; }
         public NegocioResultModel() {}
     }
 }

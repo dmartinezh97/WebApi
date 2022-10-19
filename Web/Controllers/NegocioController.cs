@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Web.Extens;
 using Web.Helpers;
 using Web.Middlewares;
 using Web.Middlewares.Exceptions;
@@ -45,7 +46,7 @@ namespace Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Buscar(string query)
         {
-            var negocios = _context.Negocio.Where(x => x.NOMBRE.Contains(query));
+            var negocios = _context.Negocio.Where(x => x.Nombre.Contains(query));
 
             return await Task.FromResult(Ok(negocios));
         }
@@ -53,11 +54,11 @@ namespace Web.Controllers
         /// <summary>
         /// Crear un negocio
         /// </summary>
-        // POST: api/Negocio/CrearNegocio
+        // POST: api/Negocio/Crear
         [HttpPost("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NegocioResultModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CrearNegocio()
+        public async Task<IActionResult> Crear(NegocioParams negocioDTO)
         {
             //TODO: Comprobar que es un perfil con el rol de empresa
             //https://www.youtube.com/watch?v=pXeeTN88pc8
@@ -65,20 +66,20 @@ namespace Web.Controllers
             long idUsuario = User.Identity.ObtenerIdentificador();
 
             var newNegocio = new NEGOCIOS();
-            newNegocio.NOMBRE = "";
-            newNegocio.DESCRIPCION = "";
-            newNegocio.ID_TIPO_NEGOCIO = 1;
+            newNegocio.Nombre = negocioDTO.nombre;
+            newNegocio.Descripcion = negocioDTO.descripcion;
+            newNegocio.IdTipoNegocio = negocioDTO.tipo_negocio;
             _context.Negocio.Add(newNegocio);
             
-            var newUsuarioNegocio = new NEGOCIO_USUARIO();
-            newUsuarioNegocio.ID_USUARIO = idUsuario;
+            var newUsuarioNegocio = new NEGOCIOUSUARIO();
+            newUsuarioNegocio.IdUsuario = idUsuario;
             newUsuarioNegocio.NEGOCIOS = newNegocio;
             
             _context.NegocioUsuario.Add(newUsuarioNegocio);
             _context.SaveChanges();
 
             var result = new NegocioResultModel();
-            result.idnegocio = newNegocio.ID_NEGOCIO;
+            result.IdNegocio = newNegocio.IdNegocio;
 
             return await Task.FromResult(Ok(result));
         }
@@ -91,22 +92,22 @@ namespace Web.Controllers
         [HttpPut("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateLogo([FromForm] LogoParams negocioDTO)
+        public async Task<IActionResult> UpdateLogo(long idnegocio, [FromForm] LogoParams negocioDTO)
         {
             long idUsuario = User.Identity.ObtenerIdentificador();
-            if (!_negocioService.TengoPermisos(negocioDTO.id_negocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
+            if (!_negocioService.TengoPermisos(idnegocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
 
-            var negocio = _context.Negocio.Find(negocioDTO.id_negocio);
+            var negocio = _context.Negocio.Find(idnegocio);
             if (negocio == null) { return BadRequest("No se ha encontrado el negocio"); }
 
-            if (!string.IsNullOrEmpty(negocio.URL_LOGO))
+            if (!string.IsNullOrEmpty(negocio.Logo))
             {
-                await _fichero.Borrar(negocio.URL_LOGO, ConfigApp.LogoNegocio);
+                await _fichero.Borrar(negocio.Logo, ConfigApp.LogoNegocio);
             }
             string fotoLogo = await _fichero.GuardarFoto(negocioDTO.logo, ConfigApp.LogoNegocio);
             if (!string.IsNullOrEmpty(fotoLogo))
             {
-                negocio.URL_LOGO = fotoLogo;
+                negocio.Logo = fotoLogo;
             }
             _context.SaveChanges();
 
@@ -120,22 +121,22 @@ namespace Web.Controllers
         [HttpPut("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateCabecera([FromForm] LogoParams negocioDTO)
+        public async Task<IActionResult> UpdateCabecera(long idnegocio, [FromForm] ImgCabeceraParams negocioDTO)
         {
             long idUsuario = User.Identity.ObtenerIdentificador();
-            if (!_negocioService.TengoPermisos(negocioDTO.id_negocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
+            if (!_negocioService.TengoPermisos(idnegocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
 
-            var negocio = _context.Negocio.Find(negocioDTO.id_negocio);
+            var negocio = _context.Negocio.Find(idnegocio);
             if (negocio == null) { return BadRequest("No se ha encontrado el negocio"); }
 
-            if (!string.IsNullOrEmpty(negocio.URL_IMG_CABECERA))
+            if (!string.IsNullOrEmpty(negocio.ImgCabecera))
             {
-                await _fichero.Borrar(negocio.URL_IMG_CABECERA, ConfigApp.CabeceraNegocio);
+                await _fichero.Borrar(negocio.ImgCabecera, ConfigApp.CabeceraNegocio);
             }
-            string fotoCabecera = await _fichero.GuardarFoto(negocioDTO.logo, ConfigApp.CabeceraNegocio);
+            string fotoCabecera = await _fichero.GuardarFoto(negocioDTO.img_cabecera, ConfigApp.CabeceraNegocio);
             if (!string.IsNullOrEmpty(fotoCabecera))
             {
-                negocio.URL_IMG_CABECERA = fotoCabecera;
+                negocio.ImgCabecera = fotoCabecera;
             }
             _context.SaveChanges();
 
@@ -143,10 +144,10 @@ namespace Web.Controllers
         }
 
 
-        /// <summary>
-        /// Retorna un listado de los negocios del usuario
-        /// </summary>
-        // GET: api/Negocio/MisNegocios
+        ///// <summary>
+        ///// Retorna un listado de los negocios del usuario
+        ///// </summary>
+        //// GET: api/Negocio/MisNegocios
         [HttpGet("[action]")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IQueryable<MisNegociosResultModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -154,90 +155,90 @@ namespace Web.Controllers
         {
             //TODO: Comprobar que es un perfil con el rol de empresa
             long idUsuario = User.Identity.ObtenerIdentificador();
-            var listIdNegocios = _context.NegocioUsuario.Where(x => x.ID_USUARIO == idUsuario).Select(x => x.ID_NEGOCIO);
-            var negocios = _context.Negocio.Where(x => listIdNegocios.Contains(x.ID_NEGOCIO)).Select(x => new MisNegociosResultModel
+            var listIdNegocios = _context.NegocioUsuario.Where(x => x.IdUsuario == idUsuario).Select(x => x.IdNegocio);
+            var negocios = _context.Negocio.Where(x => listIdNegocios.Contains(x.IdNegocio)).Select(x => new MisNegociosResultModel
             {
-                idnegocio = x.ID_NEGOCIO,
-                nombre = x.NOMBRE,
-                img_logo = _fichero.GetURLImage(ConfigApp.LogoNegocio, x.URL_LOGO),
-                img_cabecera = _fichero.GetURLImage(ConfigApp.CabeceraNegocio, x.URL_IMG_CABECERA)
+                idnegocio = x.IdNegocio,
+                nombre = x.Nombre,
+                img_logo = _fichero.GetURLImage(ConfigApp.LogoNegocio, x.Logo),
+                img_cabecera = _fichero.GetURLImage(ConfigApp.CabeceraNegocio, x.ImgCabecera)
             });
 
             return await Task.FromResult(Ok(negocios));
         }
 
-        /// <summary>
-        /// Retorna si tienes permisos para acceder al negocio
-        /// </summary>
-        // POST: api/Negocio/EsMiNegocio
-        [HttpPost("[action]")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IQueryable<MisNegociosResultModel>))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> EsMiNegocio(long idnegocio)
-        {
-            long idUsuario = User.Identity.ObtenerIdentificador();
-            var existe = _context.NegocioUsuario.Where(x => x.ID_NEGOCIO == idnegocio && x.ID_USUARIO == idUsuario).Any();
-            if (existe)
-            {
-                return await Task.FromResult(Ok());
-            }
-            else return await Task.FromResult(Unauthorized());
-        }
+        ///// <summary>
+        ///// Retorna si tienes permisos para acceder al negocio
+        ///// </summary>
+        //// POST: api/Negocio/EsMiNegocio
+        //[HttpPost("[action]")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IQueryable<MisNegociosResultModel>))]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //public async Task<IActionResult> EsMiNegocio(long idnegocio)
+        //{
+        //    long idUsuario = User.Identity.ObtenerIdentificador();
+        //    var existe = _context.NegocioUsuario.Where(x => x.ID_NEGOCIO == idnegocio && x.ID_USUARIO == idUsuario).Any();
+        //    if (existe)
+        //    {
+        //        return await Task.FromResult(Ok());
+        //    }
+        //    else return await Task.FromResult(Unauthorized());
+        //}
 
-        /// <summary>
-        /// Retorna la información general de un negocio
-        /// </summary>
-        // GET: api/Negocio/InformacionGeneral
-        [HttpGet("[action]")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IQueryable<MisNegociosResultModel>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> InformacionGeneral(long idnegocio)
-        {
-            //TODO: Comprobar que es la información a recibir tiene permiso para acceder a este negocio
-            long idUsuario = User.Identity.ObtenerIdentificador();
-            if (!_negocioService.TengoPermisos(idnegocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
-            var result = _context.Negocio.Where(x => x.ID_NEGOCIO == idnegocio).Select(x => new NegocioInformacionGeneralModel
-            {
-                idnegocio = x.ID_NEGOCIO,
-                nombre = x.NOMBRE,
-                slug = x.SLUG,
-                descripcion = x.DESCRIPCION,
-                img_logo = _fichero.GetURLImage(ConfigApp.LogoNegocio, x.URL_LOGO),
-                img_cabecera = _fichero.GetURLImage(ConfigApp.CabeceraNegocio, x.URL_IMG_CABECERA),
-                tipo_negocio = x.ID_TIPO_NEGOCIO,
-                ubicacion = x.UBICACION,
-                //ubicacion = x.ubi,
-            }).FirstOrDefault();
+        ///// <summary>
+        ///// Retorna la información general de un negocio
+        ///// </summary>
+        //// GET: api/Negocio/InformacionGeneral
+        //[HttpGet("[action]")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IQueryable<MisNegociosResultModel>))]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<IActionResult> InformacionGeneral(long idnegocio)
+        //{
+        //    //TODO: Comprobar que es la información a recibir tiene permiso para acceder a este negocio
+        //    long idUsuario = User.Identity.ObtenerIdentificador();
+        //    if (!_negocioService.TengoPermisos(idnegocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
+        //    var result = _context.Negocio.Where(x => x.ID_NEGOCIO == idnegocio).Select(x => new NegocioInformacionGeneralModel
+        //    {
+        //        idnegocio = x.ID_NEGOCIO,
+        //        nombre = x.NOMBRE,
+        //        slug = x.SLUG,
+        //        descripcion = x.DESCRIPCION,
+        //        img_logo = _fichero.GetURLImage(ConfigApp.LogoNegocio, x.URL_LOGO),
+        //        img_cabecera = _fichero.GetURLImage(ConfigApp.CabeceraNegocio, x.URL_IMG_CABECERA),
+        //        tipo_negocio = x.ID_TIPO_NEGOCIO,
+        //        ubicacion = x.UBICACION,
+        //        //ubicacion = x.ubi,
+        //    }).FirstOrDefault();
 
 
-            return await Task.FromResult(Ok(result));
-        }
+        //    return await Task.FromResult(Ok(result));
+        //}
 
-        /// <summary>
-        /// Actualiza la imagen de cabecera de un negocio
-        /// </summary>
-        // PUT: api/Negocio/UpdateCabecera
-        [HttpPut("[action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateDatos(NegocioInformacionGeneralModel negocioDTO)
-        {
-            long idUsuario = User.Identity.ObtenerIdentificador();
-            if (!_negocioService.TengoPermisos(negocioDTO.idnegocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
-            var negocio = _context.Negocio.Find(negocioDTO.idnegocio);
-            if (negocio == null) { return BadRequest("No se ha encontrado el negocio"); }
-            if(!_negocioService.SlugValido(negocio.ID_NEGOCIO, negocioDTO.slug)) { return BadRequest("El slug ya está en uso"); }
+        ///// <summary>
+        ///// Actualiza la imagen de cabecera de un negocio
+        ///// </summary>
+        //// PUT: api/Negocio/UpdateCabecera
+        //[HttpPut("[action]")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> UpdateDatos(NegocioInformacionGeneralModel negocioDTO)
+        //{
+        //    long idUsuario = User.Identity.ObtenerIdentificador();
+        //    if (!_negocioService.TengoPermisos(negocioDTO.idnegocio, idUsuario)) { return BadRequest("No tienes permiso para acceder a este negocio"); }
+        //    var negocio = _context.Negocio.Find(negocioDTO.idnegocio);
+        //    if (negocio == null) { return BadRequest("No se ha encontrado el negocio"); }
+        //    if(!_negocioService.SlugValido(negocio.ID_NEGOCIO, negocioDTO.slug)) { return BadRequest("El slug ya está en uso"); }
 
-            negocio.NOMBRE = negocioDTO.nombre;
-            negocio.SLUG = negocioDTO.slug;
-            negocio.DESCRIPCION = negocioDTO.descripcion;
-            negocio.ID_TIPO_NEGOCIO = negocioDTO.tipo_negocio;
-            negocio.UBICACION = negocioDTO.ubicacion;
+        //    negocio.NOMBRE = negocioDTO.nombre;
+        //    negocio.SLUG = negocioDTO.slug;
+        //    negocio.DESCRIPCION = negocioDTO.descripcion;
+        //    negocio.ID_TIPO_NEGOCIO = negocioDTO.tipo_negocio;
+        //    negocio.UBICACION = negocioDTO.ubicacion;
 
-            _context.SaveChanges();
+        //    _context.SaveChanges();
 
-            return await Task.FromResult(Ok());
-        }
+        //    return await Task.FromResult(Ok());
+        //}
 
     }
 }

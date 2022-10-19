@@ -14,6 +14,6 @@ namespace Entidades.Negocios {
         public string Logo { get; set; }
         public string ImgCabecera { get; set; }
         public string Ubicacion { get; set; }
-        //public long IdTipoNegocio { get; set; }
+        public long IdTipoNegocio { get; set; }
     }
 }

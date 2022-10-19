@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\EventoController.cs" />
-    <Compile Remove="Controllers\NegocioController.cs" />
     <Compile Remove="Controllers\UsuarioController.cs" />
   </ItemGroup>
 
@@ -30,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Controllers\User\" />
     <Folder Include="Controllers\Profesional\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Models\Usuario\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

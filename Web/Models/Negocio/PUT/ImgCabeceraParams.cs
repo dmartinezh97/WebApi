@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Web.Models.Negocio.PUT
 {
-    public class LogoParams
+    public class ImgCabeceraParams
     {
         [Required]
-        public IFormFile logo { get; set; }
+        public IFormFile img_cabecera { get; set; }
     }
 }
